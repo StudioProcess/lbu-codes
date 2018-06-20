@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "seedrandom": "^2.4.3"
+  },
   "devDependencies": {
     "browser-sync": "^2.24.4"
   },
