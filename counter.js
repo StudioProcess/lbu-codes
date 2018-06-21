@@ -30,7 +30,13 @@ export function currentFormatted(locale = 'en') {
   });
 }
 
+export function attach(selector, updatePeriod = 1000, locale = 'en') {
+  const target = document.querySelector(selector);
+  let int = setInterval(() => {
+    target.textContent = currentFormatted(locale);
+  }, updatePeriod);
+}
+
 (function main()  {
-  console.log('counter');
-  console.log(currentFormatted());
+  attach('#counter');
 })();
