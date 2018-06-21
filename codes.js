@@ -105,6 +105,39 @@ class Perm {
   }
 }
 
+function arraysEqual(a1, a2) {
+  if (a1.length !== a2.length) { return false; }
+  return a1.every((val, idx) => {
+    return val === a2[idx];
+  });
+}
+
+export class Codes {
+  constructor(n, p, salt = 1) {
+    this.comb = combinations(n, p); // Generate all possible combinations
+    this.shuffle = new Perm(this.comb.length, salt); // Set up the shuffle permutation
+  }
+  encode(integer) {
+    if (integer < 0 || integer >= this.comb.length) { return undefined; }
+    let idx = this.shuffle.get(integer);
+    return this.comb[idx];
+  }
+  decode(...code) { // code can be supplied as array or argument list
+    let cc = code.slice().sort(); // Copy and normalize code (by sorting)
+    // look it up
+    let integer = -1;
+    this.comb.every((val, idx) => {
+      if (arraysEqual(val, cc)) {
+        integer = idx;
+        return false; // stop iterating
+      }
+      return true; // continue iterating
+    });
+    if (integer < 0) { return undefined; }
+    return this.shuffle.inv(integer);
+  }
+}
+
 (function main() {
   let c = combinations(3, 10);
   console.log(c);
@@ -113,4 +146,8 @@ class Perm {
   let p = new Perm(10, 'salt')
   console.log(p);
   console.log(p.get(0), p.inv(7));
+  
+  let codes = new Codes(9, 4, 'salt');
+  console.log(codes);
+  window.codes = codes;
 })();
