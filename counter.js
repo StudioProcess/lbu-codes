@@ -32,9 +32,11 @@ export function currentFormatted(locale = 'en') {
 
 export function attach(selector, updatePeriod = 1000, locale = 'en') {
   const target = document.querySelector(selector);
-  let int = setInterval(() => {
+  const updateCounter = () => {
     target.textContent = currentFormatted(locale);
-  }, updatePeriod);
+  };
+  let int = setInterval(updateCounter, updatePeriod);
+  updateCounter();
 }
 
 (function main()  {
