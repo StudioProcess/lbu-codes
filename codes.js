@@ -138,16 +138,43 @@ export class Codes {
   }
 }
 
+function getIconHTML(name, style='md') {
+  let prefix = style !== '' ? style + '-' : '';
+  return `<ion-icon name="${prefix + name}"></ion-icon>`;
+}
+
+const icons = {
+  0: 'heart',
+  1: 'square',
+  2: 'play',
+  3: 'sunny',
+  4: 'moon',
+  5: 'star',
+  6: 'water',
+  7: 'flower',
+  8: 'cloud'
+};
+
+function codeToHTML(code, style='md') {
+  let out = '';
+  for (let n of code) {
+    out += getIconHTML( icons[n], style );
+  }
+  return out;
+}
+
 (function main() {
-  let c = combinations(3, 10);
-  console.log(c);
-  console.log(c.length);
-  
-  let p = new Perm(10, 'salt')
-  console.log(p);
-  console.log(p.get(0), p.inv(7));
-  
   let codes = new Codes(9, 4, 'salt');
   console.log(codes);
   window.codes = codes;
+  
+  const n = 321;
+  let html = '<thead><tr><td>No.</td><td>Code</td><td>MD Style</td><td>iOS Style</td></tr></thead>';
+  for (let i=1; i<=n; i++) {
+    let code = codes.encode(i);
+    let html_md = codeToHTML(code, 'md');
+    let html_ios = codeToHTML(code, 'ios');
+    html += `<tr><td>${i}</td><td>${code}</td><td>${html_md}</td><td>${html_ios}</td></tr>\n`;
+  }
+  document.querySelector('#codes').innerHTML = html;
 })();
