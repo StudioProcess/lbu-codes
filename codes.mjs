@@ -184,8 +184,8 @@ function codeToHTML(code, style='md') {
 }
 
 (function main() {
-  // Skip when in node
-  if (process && process.title === 'node') { return; } 
+  // Skip main() function when in Node
+  if (typeof process !== 'undefined' && process.title === 'node') { return; } 
   
   let codes = new Codes(9, 4, 'salt');
   console.log(codes);
