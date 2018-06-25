@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Let's Build Utopia – Codes</title>
   <script src="https://unpkg.com/ionicons@4.1.2/dist/ionicons.js"></script>
   <!-- <script src="./node_modules/seedrandom/seedrandom.js"></script> -->
   <style>
@@ -25,16 +25,21 @@
     .input ion-icon { font-size: 16px; }
     #counter { padding:3em; text-align:center; font-size:2em; font-variant-numeric:tabular-nums; }
     td { padding:1em; }
+    
+    /* #enter, #counter { display:none; } */
   </style>
 </head>
 <body>
-Enter Code:
-<span class="input"><ion-icon name="moon"></ion-icon><ion-icon name="moon"></ion-icon> <ion-icon name="square"></ion-icon> <ion-icon name="star"></ion-icon> <ion-icon name="cloud"></ion-icon></span><br>
-<br>
-<button><ion-icon name="heart"></ion-icon></button><button><ion-icon name="square"></button><button><ion-icon name="play"></ion-icon></button><br>
-<button><ion-icon name="sunny"></ion-icon></button><button><ion-icon name="moon"></ion-icon></button><button><ion-icon name="star"></ion-icon></button><br>
-  <!-- <ion-icon name="happy"></ion-icon> -->
-<button><ion-icon name="water"></ion-icon></ion-icon></button><button><ion-icon name="flower"></ion-icon></ion-icon></button><button><ion-icon name="cloud"></ion-icon></button><br>
+<div id="enter">
+  Enter Code:
+  <span class="input"><ion-icon name="moon"></ion-icon><ion-icon name="moon"></ion-icon> <ion-icon name="square"></ion-icon> <ion-icon name="star"></ion-icon> <ion-icon name="cloud"></ion-icon></span><br>
+  <br>
+  <div id="keypad">
+    <button><ion-icon name="heart"></ion-icon></button><button><ion-icon name="square"></button><button><ion-icon name="play"></ion-icon></button><br>
+    <button><ion-icon name="sunny"></ion-icon></button><button><ion-icon name="moon"></ion-icon></button><button><ion-icon name="star"></ion-icon></button><br>
+    <button><ion-icon name="water"></ion-icon></ion-icon></button><button><ion-icon name="flower"></ion-icon></ion-icon></button><button><ion-icon name="cloud"></ion-icon></button><br>
+  </div>
+</div>
 
 <div id="counter"></div>
 
