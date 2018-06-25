@@ -92,6 +92,20 @@ function testCodes(codes) {
     }
     t.end();
   });
+  
+  test('Same salt should give same codes and permutation', t => {
+    let otherCodes = new Codes(codes.n, codes.p, codes.salt);
+    t.same(codes._comb, otherCodes._comb);
+    t.same(codes._shuffle, otherCodes._shuffle);
+    t.end();
+  });
+  
+  test('Other salt should give same codes but other permutation', t => {
+    let otherCodes = new Codes(codes.n, codes.p, "xyz" + codes.salt);
+    t.same(codes._comb, otherCodes._comb);
+    t.notSame(codes._shuffle, otherCodes._shuffle);
+    t.end();
+  });
 }
 
 
