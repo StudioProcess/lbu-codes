@@ -40,7 +40,7 @@ function prependToArrays(item, arrays) {
   });
 }
 
-// Compute p-combinations of a set of n elements WITH repetition
+// Compute p-Combinations of a set of n elements WITH repetition
 function combinations(n, p, offset = 0) {
   if (p === 1) {
     return seq(n, offset).map(x => [x]);
@@ -56,6 +56,48 @@ function combinations(n, p, offset = 0) {
   }
   return out;
 }
+
+// Compute k-Permutations of a set of n elements
+function permutations(n, k, offset=0) {
+  if (k === 1) {
+    return seq(n, offset).map(x => [x]);
+  }
+  let out = [];
+  for (let i=0; i<n; i++) {
+    let seti = prependToArrays(
+      i+offset,
+      permutations(n, k-1, offset)
+    );
+    out = out.concat(seti);
+  }
+  return out;
+}
+
+function isReverse(perm) {
+  if ( perm.length <= 1 ) return false;
+  if ( perm[0] < perm[perm.length-1] ) return false;
+  if ( perm[0] > perm[perm.length-1] ) return true;
+  // first and last are equal, length 2 or more
+  return isReverse( perm.slice(1, perm.length-1) );
+}
+
+function removeReverses(perms) {
+  return perms.filter(x => !isReverse(x));
+}
+
+function maxRepetition(perm) {
+  let counts = [];
+  for (let x of perm) {
+    let c = counts[x];
+    counts[x] = !c ? 1 : c+1;
+  }
+  return Math.max( ...Object.values(counts) );
+}
+
+function removeRepetitions(perms, max=1) {
+  return perms.filter( x => maxRepetition(x) <= max );
+}
+
 
 // Shuffle an array (mutating)
 // Use time as seed when salt is falsy
