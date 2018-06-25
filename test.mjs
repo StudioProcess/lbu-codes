@@ -20,7 +20,23 @@ function shuffle(array) {
   return array;
 }
 
+function factorial(n) {
+  if (n < 0) return undefined;
+  if (n === 0) return 1;
+  return n * factorial(n-1);
+}
+
+function num(n, p) {
+  return factorial(n+p-1) / factorial(p) / factorial(n-1);
+}
+
+
 function testCodes(codes) {
+  test('Number of codes', t => {
+    t.equals( codes.length, num(codes.n, codes.p) );
+    t.end();
+  });
+  
   test('Check length of codes', t => {
     for (let c of codes) {
       t.equals(c.length, codes.p);
