@@ -183,6 +183,26 @@ function codeToHTML(code, style='md') {
   return out;
 }
 
+function factorial(n) {
+  if (n < 0) return undefined;
+  if (n === 0) return 1;
+  return n * factorial(n-1);
+}
+
+function num(n, p) {
+  return factorial(n+p-1) / factorial(p) / factorial(n-1);
+}
+
+export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000) {
+  let l = 1; // current code length
+  let codesTotal = 0;
+  while (codesNeeded/codesTotal > maxChanceToGuess) {
+    codesTotal = num(n, ++l);
+  }
+  return l;
+}
+
+
 (function main() {
   // Skip main() function when in Node
   if (typeof process !== 'undefined' && process.title === 'node') { return; } 
@@ -190,6 +210,8 @@ function codeToHTML(code, style='md') {
   let codes = new Codes(9, 4, 'salt');
   console.log(codes);
   window.codes = codes;
+  
+  console.log( codeLength(321, 10, 1/1000) ); // 13
   
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>MD Style</td><td>iOS Style</td></tr></thead>';
