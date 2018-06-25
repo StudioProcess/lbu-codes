@@ -121,6 +121,10 @@ export class Codes {
     this._comb = combinations(n, p); // Generate all possible combinations
     this._shuffle = new Perm(this._comb.length, salt); // Set up the shuffle permutation
   }
+  get n() { return this._n; }
+  get p() { return this._p; }
+  get salt() { return this._salt; }
+  get length() { return this._comb.length; }
   
   encode(integer) {
     if (integer < 0 || integer >= this._comb.length) { return undefined; }
@@ -141,6 +145,13 @@ export class Codes {
     });
     if (integer < 0) { return undefined; }
     return this._shuffle.inv(integer);
+  }
+  
+  // Support Iterable interface (Gets all possible codes)
+  *[Symbol.iterator]() {
+    for (let i=0; i<this.length; i++) {
+      yield this.encode(i);
+    }
   }
 }
 
