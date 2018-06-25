@@ -1,3 +1,4 @@
+import './node_modules/seedrandom/seedrandom.js';
 // pick p from n, with repetition, order irrelevant
 
 // how to generate these combinations?
@@ -114,19 +115,24 @@ function arraysEqual(a1, a2) {
 
 export class Codes {
   constructor(n, p, salt = 1) {
-    this.comb = combinations(n, p); // Generate all possible combinations
-    this.shuffle = new Perm(this.comb.length, salt); // Set up the shuffle permutation
+    this._n = n;
+    this._p = p;
+    this._salt = salt;
+    this._comb = combinations(n, p); // Generate all possible combinations
+    this._shuffle = new Perm(this._comb.length, salt); // Set up the shuffle permutation
   }
+  
   encode(integer) {
-    if (integer < 0 || integer >= this.comb.length) { return undefined; }
-    let idx = this.shuffle.get(integer);
-    return this.comb[idx];
+    if (integer < 0 || integer >= this._comb.length) { return undefined; }
+    let idx = this._shuffle.get(integer);
+    return this._comb[idx];
   }
+  
   decode(...code) { // code can be supplied as array or argument list
     let cc = code.slice().sort(); // Copy and normalize code (by sorting)
     // look it up
     let integer = -1;
-    this.comb.every((val, idx) => {
+    this._comb.every((val, idx) => {
       if (arraysEqual(val, cc)) {
         integer = idx;
         return false; // stop iterating
@@ -134,7 +140,7 @@ export class Codes {
       return true; // continue iterating
     });
     if (integer < 0) { return undefined; }
-    return this.shuffle.inv(integer);
+    return this._shuffle.inv(integer);
   }
 }
 
@@ -164,6 +170,9 @@ function codeToHTML(code, style='md') {
 }
 
 (function main() {
+  // Skip when in node
+  if (process && process.title === 'node') { return; } 
+  
   let codes = new Codes(9, 4, 'salt');
   console.log(codes);
   window.codes = codes;

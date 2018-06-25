@@ -7,11 +7,12 @@
     "seedrandom": "^2.4.3"
   },
   "devDependencies": {
-    "browser-sync": "^2.24.4"
+    "browser-sync": "^2.24.4",
+    "tape": "^4.9.1"
   },
   "scripts": {
     "start": "browser-sync . --watch --port 8080 --no-notify",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-modules test.mjs"
   },
   "author": "",
   "license": "ISC"
