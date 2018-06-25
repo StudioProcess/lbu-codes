@@ -129,7 +129,7 @@ export class Codes {
   encode(integer) {
     if (integer < 0 || integer >= this._comb.length) { return undefined; }
     let idx = this._shuffle.get(integer);
-    return this._comb[idx];
+    return this._comb[idx].slice();
   }
   
   decode(...code) { // code can be supplied as array or argument list
