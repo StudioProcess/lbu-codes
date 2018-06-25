@@ -23,29 +23,32 @@ import './node_modules/seedrandom/seedrandom.js';
   
 */
 
-// Set of (0+offset ... n-1+offset)
-function set(n, offset = 0) {
+
+// Create an array of sequential integers starting at an offset
+function seq(length, offset = 0) {
   let out = [];
-  for (let i=0; i<n; i++) {
-    out.push([i+offset]);
+  for (let i=0; i<length; i++) {
+    out.push( i+offset );
   }
   return out;
 }
 
-function appendSet(x, set) {
-  return set.map(arr => {
-    return Array.isArray(x) ? x.concat(arr) : [x].concat(arr);
+// Prepend an item to all arrays given and return the resulting array of arrays
+function prependToArrays(item, arrays) {
+  return arrays.map(arr => {
+    return Array.isArray(item) ? x.concat(arr) : [item].concat(arr);
   });
 }
 
+// Compute p-combinations of a set of n elements WITH repetition
 function combinations(n, p, offset = 0) {
   if (p === 1) {
-    return set(n, offset);
+    return seq(n, offset).map(x => [x]);
   }
   
   let out = [];
   for (let i=0; i<n; i++) {
-    let seti = appendSet(
+    let seti = prependToArrays(
       i+offset,
       combinations(n-i, p-1, i+offset)
     );
@@ -54,16 +57,8 @@ function combinations(n, p, offset = 0) {
   return out;
 }
 
-// Create an array of sequential integers starting at 0
-function seq(length) {
-  let out = [];
-  for (let i=0; i<length; i++) {
-    out.push(i);
-  }
-  return out;
-}
-
 // Shuffle an array (mutating)
+// Use time as seed when salt is falsy
 function shuffle(array, salt = '') {
   let currentIndex = array.length, temporaryValue, randomIndex;
   if (salt) {
@@ -83,7 +78,7 @@ function shuffle(array, salt = '') {
   return array;
 }
 
-// Permutation of sequential integers with inverse
+// Permutation array of sequential integers with inverse
 function perm(length, salt = '') {
   let forward = shuffle(seq(length), salt);
   let inverse = forward.reduce( (acc, val, idx) => {
@@ -106,6 +101,7 @@ class Perm {
   }
 }
 
+// Check if all elements of two arrays test equal (===)
 function arraysEqual(a1, a2) {
   if (a1.length !== a2.length) { return false; }
   return a1.every((val, idx) => {
@@ -189,7 +185,8 @@ function factorial(n) {
   return n * factorial(n-1);
 }
 
-function num(n, p) {
+// Number of p-Combinations of a set of n items WITH repetition
+function numCombinations(n, p) {
   return factorial(n+p-1) / factorial(p) / factorial(n-1);
 }
 
@@ -197,7 +194,7 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000) {
   let l = 1; // current code length
   let codesTotal = 0;
   while (codesNeeded/codesTotal > maxChanceToGuess) {
-    codesTotal = num(n, ++l);
+    codesTotal = numCombinations(n, ++l);
   }
   return l;
 }
