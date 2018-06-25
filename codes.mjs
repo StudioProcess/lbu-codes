@@ -133,6 +133,9 @@ export class Codes {
   }
   
   decode(...code) { // code can be supplied as array or argument list
+    if ( code.length >= 1 && Array.isArray(code[0]) ) {
+      code = code[0];
+    }
     let cc = code.slice().sort(); // Copy and normalize code (by sorting)
     // look it up
     let integer = -1;
