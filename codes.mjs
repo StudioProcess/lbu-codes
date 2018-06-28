@@ -36,7 +36,7 @@ function seq(length, offset = 0) {
 // Prepend an item to all arrays given and return the resulting array of arrays
 function prependToArrays(item, arrays) {
   return arrays.map(arr => {
-    return Array.isArray(item) ? x.concat(arr) : [item].concat(arr);
+    return Array.isArray(item) ? item.concat(arr) : [item].concat(arr);
   });
 }
 

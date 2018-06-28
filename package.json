@@ -1,19 +1,20 @@
 {
-  "name": "lbu-icons",
+  "name": "lbu-codes",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "index.html",
   "dependencies": {
     "seedrandom": "^2.4.3"
   },
   "devDependencies": {
-    "browser-sync": "^2.24.4",
+    "browser-sync": "^2.24.5",
     "tape": "^4.9.1"
   },
   "scripts": {
     "start": "browser-sync . --watch --port 8080 --no-notify",
     "test": "node --experimental-modules test.mjs"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Process Studio <contact@process.studio> (https://process.studio)",
+  "license": "AGPL-3.0",
+  "private": true
 }
