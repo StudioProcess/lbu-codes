@@ -243,6 +243,13 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000) {
 
 
 (function main() {
+  let p = permutations(10, 6);
+  p = removeReverses(p);
+  // p = removeRepetitions(p, 6);
+  console.log(p.length, 321/p.length);
+  // console.log(p);
+  // console.log(removeRepetitions(p));
+  
   // Skip main() function when in Node
   if (typeof process !== 'undefined' && process.title === 'node') { return; } 
   
