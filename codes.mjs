@@ -226,7 +226,7 @@ export class Codes {
 }
 
 // Note: valid styles are `md` and `ios`
-function getIconHTML(name, style='md') {
+function getIconHTML(name, style='') {
   let prefix = style !== '' ? style + '-' : '';
   return `<ion-icon name="${prefix + name}"></ion-icon>`;
 }
@@ -307,11 +307,23 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   // let codes = new Codes(9, 6, 'salt', generatePermutationsNoReverse);
   let codes = new Codes(10, 6, 'salt', generatePermutationsNoReverseMaxRepetition(3));
   
+  // Code Info
   let info = codes.info(321);
   console.log(info);
   let codeInfo = `Alphabet Size: ${info.n}<br>Code Length: ${info.k}<br>Codes: ${info.codesNeeded}<br>Possibilities: ${info.codesTotal}<br>Chance to guess: ${info.chanceReadable}`;
   document.querySelector('#code_info').innerHTML = codeInfo;
   
+  // Alphabet Info
+  let al = '';
+  al += '<tr>' + Object.keys(icons).filter(x => x<codes.n).reduce((acc, i) => {
+    return acc += `<td>${i}</td>`;
+  }, '') + '</tr>';
+  al += '<tr>' + Object.entries(icons).filter(e => e[0]<codes.n).reduce((acc, e) => {
+    return acc += `<td>${getIconHTML(e[1])}</td>`;
+  }, '') + '</tr>';
+  document.querySelector('#alphabet').innerHTML = al;
+  
+  // Code list
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>Icons</td></tr></thead>';
   for (let i=1; i<=n; i++) {
