@@ -151,12 +151,30 @@ function arraysEqual(a1, a2) {
   });
 }
 
+function generateCombinationsWithRepetition(n, k) {
+  return combinations(n, k);
+}
+
+function generatePermutationsNoReverse(n, k) {
+  let codes = permutations(n, k);
+  codes = removeReverses(codes);
+  return codes;
+}
+
+function generatePermutationsNoReverseMaxRepetition(max) { // eslint-disable-line no-unused-vars
+  return (n, k) => {
+    let codes = generatePermutationsNoReverse(n, k);
+    codes = removeRepetitions(codes, max);
+    return codes;
+  };
+}
+
 export class Codes {
-  constructor(n, k, salt = 1) {
+  constructor(n, k, salt = 1, generate=generateCombinationsWithRepetition) {
     this._n = n;
     this._k = k;
     this._salt = salt;
-    this._codes = combinations(n, k); // Generate all possible combinations
+    this._codes = generate(n, k, salt); // Generate array of codes
     this._shuffle = new Perm(this._codes.length, salt); // Set up the shuffle permutation
   }
   get n() { return this._n; }
@@ -194,6 +212,17 @@ export class Codes {
       yield this.encode(i);
     }
   }
+  
+  info(codesNeeded=1) {
+    return {
+      codesTotal: this.length,
+      codesNeeded,
+      chance: codesNeeded/this.length,
+      chanceReadable: "1/" + Math.ceil(this.length/codesNeeded),
+      n: this.n,
+      k: this.k
+    };
+  }
 }
 
 // Note: valid styles are `md` and `ios`
@@ -212,6 +241,7 @@ const icons = {
   6: 'md-cloud',
   7: 'ios-square',
   8: 'md-water',
+  9: 'ios-happy',
 };
 
 function codeToHTML(code, style='') {
@@ -234,7 +264,7 @@ function numCombinations(n, k) {
 }
 
 // Number of k-Permutations of n items WITH repetition
-function numPermutations(n, k) {
+function numPermutations(n, k) { // eslint-disable-line no-unused-vars
   return Math.pow(n, k);
 }
 
@@ -267,12 +297,20 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   // console.log(p);
   // console.log(removeRepetitions(p));
   
-  console.log( codeLength(321, 10, 1/10000, numCombinations) ); // 18
-  console.log( codeLength(321, 9, 1/10000, numPermutations) ); // 7
+  // console.log( codeLength(321, 10, 1/10000, numCombinations) ); // 18
+  // console.log( codeLength(321, 9, 1/10000, numPermutations) ); // 7
   
-  let codes = new Codes(9, 7, 'salt');
-  console.log(codes);
-  window.codes = codes;
+  // let codes = new Codes(9, 7, 'salt');
+  // console.log(codes);
+  // window.codes = codes;
+  
+  // let codes = new Codes(9, 6, 'salt', generatePermutationsNoReverse);
+  let codes = new Codes(10, 6, 'salt', generatePermutationsNoReverseMaxRepetition(3));
+  
+  let info = codes.info(321);
+  console.log(info);
+  let codeInfo = `Alphabet Size: ${info.n}<br>Code Length: ${info.k}<br>Codes: ${info.codesNeeded}<br>Possibilities: ${info.codesTotal}<br>Chance to guess: ${info.chanceReadable}`;
+  document.querySelector('#code_info').innerHTML = codeInfo;
   
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>Icons</td></tr></thead>';
