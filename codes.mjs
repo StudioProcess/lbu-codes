@@ -228,7 +228,8 @@ export class Codes {
 // Note: valid styles are `md` and `ios`
 function getIconHTML(name, style='') {
   let prefix = style !== '' ? style + '-' : '';
-  return `<ion-icon name="${prefix + name}"></ion-icon>`;
+  // return `<ion-icon name="${prefix + name}"></ion-icon>`; // SVG icons
+  return `<i class="icon ion-${prefix + name}"></i>`; // Font icons
 }
 
 const icons = {
@@ -247,7 +248,7 @@ const icons = {
 function codeToHTML(code, style='') {
   let out = '';
   for (let n of code) {
-    out += getIconHTML( icons[n], style );
+    out += getIconHTML( icons[n], style ) + ' ';
   }
   return out;
 }
