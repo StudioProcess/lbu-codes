@@ -152,22 +152,22 @@ function arraysEqual(a1, a2) {
 }
 
 export class Codes {
-  constructor(n, p, salt = 1) {
+  constructor(n, k, salt = 1) {
     this._n = n;
-    this._p = p;
+    this._k = k;
     this._salt = salt;
-    this._comb = combinations(n, p); // Generate all possible combinations
-    this._shuffle = new Perm(this._comb.length, salt); // Set up the shuffle permutation
+    this._codes = combinations(n, k); // Generate all possible combinations
+    this._shuffle = new Perm(this._codes.length, salt); // Set up the shuffle permutation
   }
   get n() { return this._n; }
-  get p() { return this._p; }
+  get k() { return this._k; }
   get salt() { return this._salt; }
-  get length() { return this._comb.length; }
+  get length() { return this._codes.length; }
   
   encode(integer) {
-    if (integer < 0 || integer >= this._comb.length) { return undefined; }
+    if (integer < 0 || integer >= this._codes.length) { return undefined; }
     let idx = this._shuffle.get(integer);
-    return this._comb[idx].slice();
+    return this._codes[idx].slice();
   }
   
   decode(...code) { // code can be supplied as array or argument list
@@ -177,7 +177,7 @@ export class Codes {
     let cc = code.slice().sort(); // Copy and normalize code (by sorting)
     // look it up
     let integer = -1;
-    this._comb.every((val, idx) => {
+    this._codes.every((val, idx) => {
       if (arraysEqual(val, cc)) {
         integer = idx;
         return false; // stop iterating

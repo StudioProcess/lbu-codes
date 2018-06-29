@@ -26,20 +26,20 @@ function factorial(n) {
   return n * factorial(n-1);
 }
 
-function num(n, p) {
-  return factorial(n+p-1) / factorial(p) / factorial(n-1);
+function num(n, k) {
+  return factorial(n+k-1) / factorial(k) / factorial(n-1);
 }
 
 
 function testCodes(codes) {
   test('Number of codes', t => {
-    t.equals( codes.length, num(codes.n, codes.p) );
+    t.equals( codes.length, num(codes.n, codes.k) );
     t.end();
   });
   
   test('Check length of codes', t => {
     for (let c of codes) {
-      t.equals(c.length, codes.p);
+      t.equals(c.length, codes.k);
     }
     t.end();
   });
@@ -94,15 +94,15 @@ function testCodes(codes) {
   });
   
   test('Same salt should give same codes and permutation', t => {
-    let otherCodes = new Codes(codes.n, codes.p, codes.salt);
-    t.same(codes._comb, otherCodes._comb);
+    let otherCodes = new Codes(codes.n, codes.k, codes.salt);
+    t.same(codes._codes, otherCodes._codes);
     t.same(codes._shuffle, otherCodes._shuffle);
     t.end();
   });
   
   test('Other salt should give same codes but other permutation', t => {
-    let otherCodes = new Codes(codes.n, codes.p, "xyz" + codes.salt);
-    t.same(codes._comb, otherCodes._comb);
+    let otherCodes = new Codes(codes.n, codes.k, "xyz" + codes.salt);
+    t.same(codes._codes, otherCodes._codes);
     t.notSame(codes._shuffle, otherCodes._shuffle);
     t.end();
   });
