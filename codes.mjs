@@ -58,7 +58,7 @@ function combinations(n, k, offset = 0) {
 }
 
 // Compute k-Permutations of a set of n elements WITH repetition
-function permutations(n, k, offset=0) {
+function permutations(n, k, offset=0) { // eslint-disable-line no-unused-vars
   if (k === 1) {
     return seq(n, offset).map(x => [x]);
   }
@@ -81,7 +81,7 @@ function isReverse(perm) {
   return isReverse( perm.slice(1, perm.length-1) );
 }
 
-function removeReverses(perms) {
+function removeReverses(perms) { // eslint-disable-line no-unused-vars
   return perms.filter(x => !isReverse(x));
 }
 
@@ -240,18 +240,27 @@ function numPermutations(n, k) {
 export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numCombinations,) {
   let len = 1; // current code length
   let codesTotal = 0;
-  while (codesNeeded/codesTotal >= maxChanceToGuess) {
+  while (codesNeeded/codesTotal > maxChanceToGuess) {
     codesTotal = numFunc(n, ++len);
   }
+  let result = {
+    codesNeeded,
+    n,
+    maxChanceToGuess,
+    codesTotal,
+    chance: codesNeeded/codesTotal,
+    k: len
+  };
+  console.log(result);
   return len;
 }
 
 
 (function main() {
-  let p = permutations(10, 6);
-  p = removeReverses(p);
-  // p = removeRepetitions(p, 6);
-  console.log(p.length, 321/p.length);
+  // let p = permutations(9, 7);
+  // p = removeReverses(p);
+  // // p = removeRepetitions(p, 6);
+  // console.log(p.length, 321/p.length, "1/"+Math.ceil(p.length/321));
   // console.log(p);
   // console.log(removeRepetitions(p));
   
