@@ -40,9 +40,9 @@ function prependToArrays(item, arrays) {
   });
 }
 
-// Compute p-Combinations of a set of n elements WITH repetition
-function combinations(n, p, offset = 0) {
-  if (p === 1) {
+// Compute k-Combinations of a set of n elements WITH repetition
+function combinations(n, k, offset = 0) {
+  if (k === 1) {
     return seq(n, offset).map(x => [x]);
   }
   
@@ -50,14 +50,14 @@ function combinations(n, p, offset = 0) {
   for (let i=0; i<n; i++) {
     let seti = prependToArrays(
       i+offset,
-      combinations(n-i, p-1, i+offset)
+      combinations(n-i, k-1, i+offset)
     );
     out = out.concat(seti);
   }
   return out;
 }
 
-// Compute k-Permutations of a set of n elements
+// Compute k-Permutations of a set of n elements WITH repetition
 function permutations(n, k, offset=0) {
   if (k === 1) {
     return seq(n, offset).map(x => [x]);
@@ -94,7 +94,7 @@ function maxRepetition(perm) {
   return Math.max( ...Object.values(counts) );
 }
 
-function removeRepetitions(perms, max=1) {
+function removeRepetitions(perms, max=1) { // eslint-disable-line
   return perms.filter( x => maxRepetition(x) <= max );
 }
 
@@ -227,18 +227,23 @@ function factorial(n) {
   return n * factorial(n-1);
 }
 
-// Number of p-Combinations of a set of n items WITH repetition
-function numCombinations(n, p) {
-  return factorial(n+p-1) / factorial(p) / factorial(n-1);
+// Number of k-Combinations of a set of n items WITH repetition
+function numCombinations(n, k) {
+  return factorial(n+k-1) / factorial(k) / factorial(n-1);
 }
 
-export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000) {
-  let l = 1; // current code length
+// Number of k-Permutations of n items WITH repetition
+function numPermutations(n, k) {
+  return Math.pow(n, k);
+}
+
+export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numCombinations,) {
+  let len = 1; // current code length
   let codesTotal = 0;
-  while (codesNeeded/codesTotal > maxChanceToGuess) {
-    codesTotal = numCombinations(n, ++l);
+  while (codesNeeded/codesTotal >= maxChanceToGuess) {
+    codesTotal = numFunc(n, ++len);
   }
-  return l;
+  return len;
 }
 
 
@@ -257,7 +262,8 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000) {
   console.log(codes);
   window.codes = codes;
   
-  console.log( codeLength(321, 10, 1/1000) ); // 13
+  console.log( codeLength(321, 10, 1/10000, numCombinations) ); // 18
+  console.log( codeLength(321, 9, 1/10000, numPermutations) ); // 7
   
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>MD Style</td><td>iOS Style</td></tr></thead>';
