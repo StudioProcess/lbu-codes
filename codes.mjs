@@ -270,6 +270,7 @@ function numPermutations(n, k) { // eslint-disable-line no-unused-vars
   return Math.pow(n, k);
 }
 
+// NOTE: codesTotal might not be the correct measure for calculating `chance`
 export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numCombinations,) {
   let len = 1; // current code length
   let codesTotal = 0;
@@ -312,7 +313,7 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   // Code Info
   let info = codes.info(321);
   console.log(info);
-  let codeInfo = `Alphabet Size: ${info.n}<br>Code Length: ${info.k}<br>Codes: ${info.codesNeeded}<br>Possibilities: ${info.possibilities}<br>Chance to guess: ${info.chanceReadable}<br>Chance to guess (incl. reverse): 1/${Math.ceil(1/info.chance/2)}`;
+  let codeInfo = `Alphabet Size: ${info.n}<br>Code Length: ${info.k}<br>Codes: ${info.codesNeeded}<br>Chance to guess: ${info.chanceReadable}<br>Chance to guess (incl. reverse): 1/${Math.ceil(1/info.chance/2)}`;
   document.querySelector('#code_info').innerHTML = codeInfo;
   
   // Alphabet Info
