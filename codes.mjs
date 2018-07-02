@@ -217,8 +217,9 @@ export class Codes {
     return {
       codesTotal: this.length,
       codesNeeded,
-      chance: codesNeeded/this.length,
-      chanceReadable: "1/" + Math.ceil(this.length/codesNeeded),
+      possibilities: Math.pow(this.n, this.k),
+      chance: codesNeeded/Math.pow(this.n, this.k),
+      chanceReadable: "1/" + Math.ceil(Math.pow(this.n, this.k)/codesNeeded),
       n: this.n,
       k: this.k
     };
@@ -311,7 +312,7 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   // Code Info
   let info = codes.info(321);
   console.log(info);
-  let codeInfo = `Alphabet Size: ${info.n}<br>Code Length: ${info.k}<br>Codes: ${info.codesNeeded}<br>Possibilities: ${info.codesTotal}<br>Chance to guess: ${info.chanceReadable}`;
+  let codeInfo = `Alphabet Size: ${info.n}<br>Code Length: ${info.k}<br>Codes: ${info.codesNeeded}<br>Possibilities: ${info.possibilities}<br>Chance to guess: ${info.chanceReadable}<br>Chance to guess (incl. reverse): 1/${Math.ceil(1/info.chance/2)}`;
   document.querySelector('#code_info').innerHTML = codeInfo;
   
   // Alphabet Info
