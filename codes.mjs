@@ -329,10 +329,17 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   // Code list
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>Icons</td></tr></thead>';
+  let csv = '"Number","Code"\n', csv_rev = '"Code","Number"\n';
   for (let i=1; i<=n; i++) {
     let code = codes.encode(i);
     let icons = codeToHTML(code);
     html += `<tr><td>${i}</td><td>${code}</td><td>${icons}</td></tr>\n`;
+    csv += `"${i}","${code.toString()}"\n`;
+    csv_rev += `"${code.toString()}","${i}"\n`;
+    code.reverse();
+    csv_rev += `"${code.toString()}","${i}"\n`;
   }
   document.querySelector('#codes').innerHTML = html;
+  console.log("CSV:"); console.log(csv);
+  console.log("CSV (REVERSE):"); console.log(csv_rev);
 })();
