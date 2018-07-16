@@ -20,30 +20,62 @@
       margin:4px; padding:2px; display:inline-block; 
       /* border-radius: 4px; */
     }
-    .input { 
-      border-bottom:1px solid black; 
-      width: 200px;
+
+    input { 
+      font-family:"Ionicons"; 
+      font-size:32px; height:40px; letter-spacing:0.2em; 
+      pointer-events: none;
     }
-    .input ion-icon { font-size: 16px; }
   </style>
 </head>
 <body>
   <div id="enter">
-    Enter Code:
-    <span class="input"><i class="icon ion-ios-moon"></i> <i class="icon ion-ios-moon"></i> <i class="icon ion-ios-square"></i> <i class="icon ion-ios-star"></i> <i class="icon ion-md-cloud"></i></span><br>
-    <br>
+    Enter Code:<br>
+    <input></input><br>
     <div id="keypad">
-      <button><i class="icon ion-md-heart"></i></button>
-      <button><i class="icon ion-ios-square"></i></button>
-      <button><i class="icon ion-md-play"></i></button><br>
-      <button><i class="icon ion-ios-sunny"></i></button>
-      <button><i class="icon ion-ios-moon"></i></button>
-      <button><i class="icon ion-ios-star"></i></button><br>
-      <button><i class="icon ion-md-water"></i></button>
-      <button><i class="icon ion-md-flower"></i></button>
-      <button><i class="icon ion-md-cloud"></i></button><br>
+      <button data-digit="0"><i class="icon ion-md-heart"></i></button>
+      <button data-digit="1"><i class="icon ion-ios-moon"></i></button>
+      <button data-digit="2"><i class="icon ion-md-flower"></i></button>
+      <button data-digit="3"><i class="icon ion-ios-star"></i></button>
+      <button data-digit="4"><i class="icon ion-ios-sunny"></i></button>
+      <button data-digit="5"><i class="icon ion-md-play"></i></button>
+      <button data-digit="6"><i class="icon ion-md-cloud"></i></button>
+      <button data-digit="7"><i class="icon ion-ios-square"></i></button>
+      <button data-digit="8"><i class="icon ion-md-water"></i></button>
+      <button data-digit="9"><i class="icon ion-ios-happy"></i></button><br>
+      <button class="btn-delete">delete</button><br>
+      <button class="btn-submit">submit</button>
     </div>
   </div>
-
+  
+  <script type="module">
+    const digits = {
+      0: ['md-heart', 'f308'],
+      1: ['ios-moon', 'f468'],
+      2: ['md-flower', 'f2f3'],
+      3: ['ios-star', 'f4b3'],
+      4: ['ios-sunny', 'f4b7'],
+      5: ['md-play', 'f357'],
+      6: ['md-cloud', 'f2c9'],
+      7: ['ios-square', 'f21a'],
+      8: ['md-water', 'f3a7'],
+      9: ['ios-happy', 'f192'],
+    };
+    function characterForDigit(d) {
+      let hex = digits[d][1];
+      let cp= parseInt(hex, 16);
+      return String.fromCodePoint(cp);
+    }
+    let input = document.querySelector('input');
+    let buttons = document.querySelectorAll('button[data-digit]');
+    buttons.forEach(el => {
+      el.addEventListener('click', e => {
+        input.value += characterForDigit(el.dataset.digit);
+      });
+    });
+    document.querySelector('.btn-delete').addEventListener('click', e => {
+      input.value = input.value.slice(0, -1);
+    });
+  </script>
 </body>
 </html>
