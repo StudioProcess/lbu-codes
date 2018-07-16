@@ -50,20 +50,20 @@
   
   <script type="module">
     const digits = {
-      0: ['md-heart', 'f308'],
-      1: ['ios-moon', 'f468'],
-      2: ['md-flower', 'f2f3'],
-      3: ['ios-star', 'f4b3'],
-      4: ['ios-sunny', 'f4b7'],
-      5: ['md-play', 'f357'],
-      6: ['md-cloud', 'f2c9'],
-      7: ['ios-square', 'f21a'],
-      8: ['md-water', 'f3a7'],
-      9: ['ios-happy', 'f192'],
+      0: ['md-heart', '0xf308'],
+      1: ['ios-moon', '0xf468'],
+      2: ['md-flower', '0xf2f3'],
+      3: ['ios-star', '0xf4b3'],
+      4: ['ios-sunny', '0xf4b7'],
+      5: ['md-play', '0xf357'],
+      6: ['md-cloud', '0xf2c9'],
+      7: ['ios-square', '0xf21a'],
+      8: ['md-water', '0xf3a7'],
+      9: ['ios-happy', '0xf192'],
     };
     function characterForDigit(d) {
       let hex = digits[d][1];
-      let cp= parseInt(hex, 16);
+      let cp= parseInt(hex, 16); // the 16 is not actually necessary when using hex formatted as 0xABCD
       return String.fromCodePoint(cp);
     }
     let input = document.querySelector('input');
