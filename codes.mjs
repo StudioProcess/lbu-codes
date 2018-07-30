@@ -360,15 +360,16 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   // Code list
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>Icons</td></tr></thead>';
-  let csv = '"Number","Code"\n', csv_rev = '"Code","Number"\n';
+  let csv = '"Number","Code","Icons"\n', csv_rev = '"Code","Number","Icons"\n';
   for (let i=1; i<=n; i++) {
     let code = codes.encode(i);
     let icons = codeToHTMLCopyPaste(code);
+    let iconsText = codeToText(code);
     html += `<tr><td>${i}</td><td>${code}</td><td class="icons">${icons}</td></tr>\n`;
-    csv += `"${i}","${code.toString()}"\n`;
-    csv_rev += `"${code.toString()}","${i}"\n`;
+    csv += `"${i}","${code.toString()}","${iconsText}"\n`;
+    csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
     code.reverse();
-    csv_rev += `"${code.toString()}","${i}"\n`;
+    csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
   }
   document.querySelector('#codes').innerHTML = html;
   console.log("CSV:"); console.log(csv);
