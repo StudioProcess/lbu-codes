@@ -226,6 +226,7 @@ export class Codes {
   }
 }
 
+// Get <i>-style HTML for an icon name
 // Note: valid styles are `md` and `ios`
 function getIconHTML(name, style='') {
   let prefix = style !== '' ? style + '-' : '';
@@ -233,23 +234,53 @@ function getIconHTML(name, style='') {
   return `<i class="icon ion-${prefix + name}"></i>`; // Font icons
 }
 
-const icons = {
-  0: 'md-heart',
-  1: 'ios-moon',
-  2: 'md-flower',
-  3: 'ios-star',
-  4: 'ios-sunny',
-  5: 'md-play',
-  6: 'md-cloud',
-  7: 'ios-square',
-  8: 'md-water',
-  9: 'ios-happy',
+const digits = {
+  0: ['md-heart', '0xf308'],
+  1: ['ios-moon', '0xf468'],
+  2: ['md-flower', '0xf2f3'],
+  3: ['ios-star', '0xf4b3'],
+  4: ['ios-sunny', '0xf4b7'],
+  5: ['md-play', '0xf357'],
+  6: ['md-cloud', '0xf2c9'],
+  7: ['ios-square', '0xf21a'],
+  8: ['md-water', '0xf3a7'],
+  9: ['ios-happy', '0xf192'],
 };
 
-function codeToHTML(code, style='') {
+// Get plain text character for a digit
+function characterForDigit(d) {
+  let hex = digits[d][1];
+  let cp = parseInt(hex, 16); // the 16 is not actually necessary when using hex formatted as 0xABCD
+  return String.fromCodePoint(cp);
+}
+
+function getDigitHTMLCopyPaste(d) {
+  return `<i class="icon">${characterForDigit(d)}</i>`; // Font icons
+}
+
+// Get <i>-style HTML for a code
+function codeToHTML(code, style='') { // eslint-disable-line no-unused-vars
   let out = '';
   for (let n of code) {
-    out += getIconHTML( icons[n], style ) + ' ';
+    out += getIconHTML( digits[n][0], style ) + ' ';
+  }
+  return out;
+}
+
+// Get HTML that produces copy/pastable output
+function codeToHTMLCopyPaste(code) {
+  let out = '';
+  for (let d of code) {
+    out += getDigitHTMLCopyPaste(d);
+  }
+  return out;
+}
+
+// Get plain text for a code
+function codeToText(code) { // eslint-disable-line no-unused-vars
+  let out = '';
+  for (let d of code) {
+    out += characterForDigit( d );
   }
   return out;
 }
@@ -318,10 +349,10 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   
   // Alphabet Info
   let al = '';
-  al += '<tr>' + Object.keys(icons).filter(x => x<codes.n).reduce((acc, i) => {
+  al += '<tr>' + Object.keys(digits).filter(x => x<codes.n).reduce((acc, i) => {
     return acc += `<td>${i}</td>`;
   }, '') + '</tr>';
-  al += '<tr>' + Object.entries(icons).filter(e => e[0]<codes.n).reduce((acc, e) => {
+  al += '<tr>' + Object.entries(digits).filter(e => e[0]<codes.n).reduce((acc, e) => {
     return acc += `<td>${getIconHTML(e[1])}</td>`;
   }, '') + '</tr>';
   document.querySelector('#alphabet').innerHTML = al;
@@ -332,8 +363,8 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   let csv = '"Number","Code"\n', csv_rev = '"Code","Number"\n';
   for (let i=1; i<=n; i++) {
     let code = codes.encode(i);
-    let icons = codeToHTML(code);
-    html += `<tr><td>${i}</td><td>${code}</td><td>${icons}</td></tr>\n`;
+    let icons = codeToHTMLCopyPaste(code);
+    html += `<tr><td>${i}</td><td>${code}</td><td class="icons">${icons}</td></tr>\n`;
     csv += `"${i}","${code.toString()}"\n`;
     csv_rev += `"${code.toString()}","${i}"\n`;
     code.reverse();
