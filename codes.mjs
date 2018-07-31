@@ -352,8 +352,8 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   al += '<tr>' + Object.keys(digits).filter(x => x<codes.n).reduce((acc, i) => {
     return acc += `<td>${i}</td>`;
   }, '') + '</tr>';
-  al += '<tr>' + Object.entries(digits).filter(e => e[0]<codes.n).reduce((acc, e) => {
-    return acc += `<td>${getIconHTML(e[1])}</td>`;
+  al += '<tr>' + Object.keys(digits).filter(d => d<codes.n).reduce((acc, d) => {
+    return acc += `<td>${codeToHTMLCopyPaste(d)}</td>`;
   }, '') + '</tr>';
   document.querySelector('#alphabet').innerHTML = al;
   
