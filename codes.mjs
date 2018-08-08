@@ -320,6 +320,32 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   return len;
 }
 
+function uploadCodes(data) {
+  // Initialize Firebase
+  if (!window.firebase.apps.length) {
+    const config = {
+      apiKey: "AIzaSyCdr0kpTbsED6du_p-RulO_m4L7aglFoio",
+      projectId: "salt-84770",
+    };
+    window.firebase.initializeApp(config);
+  }
+  
+  const db = window.firebase.firestore();
+  db.settings( {timestampsInSnapshots: true} );
+  const batch = db.batch();
+  
+  for (let key of Object.keys(data)) {
+    batch.set( db.doc('codes/' + key), {number: data[key]} );
+  }
+  
+  batch.commit().then(() => {
+    console.log('Done uploading codes');
+  }).catch(err => {
+    console.log('Error uploading codes:', err);
+  });
+  // console.log(data);
+}
+
 
 (function main() {
   // Skip main() function when in Node
@@ -361,6 +387,8 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>Icons</td></tr></thead>';
   let csv = '"Number","Code","Icons"\n', csv_rev = '"Code","Number","Icons"\n';
+  let hash = {};
+  let hash_flipped = {};
   for (let i=1; i<=n; i++) {
     let code = codes.encode(i);
     let icons = codeToHTMLCopyPaste(code);
@@ -370,8 +398,15 @@ export function codeLength(codesNeeded, n, maxChanceToGuess=1/1000, numFunc=numC
     csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
     code.reverse();
     csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
+    
+    hash[`${code.toString()}`] = i;
+    hash_flipped[`${code.slice().reverse().toString()}`] = i; // add flipped code
   }
   document.querySelector('#codes').innerHTML = html;
   console.log("CSV:"); console.log(csv);
   console.log("CSV (REVERSE):"); console.log(csv_rev);
+  
+  // Upload to firebase (max 500 per call)
+  // uploadCodes(hash);
+  // uploadCodes(hash_flipped);
 })();
