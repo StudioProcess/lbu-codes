@@ -399,14 +399,14 @@ function uploadCodes(data) {
     code.reverse();
     csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
     
-    hash[`${code.toString()}`] = i;
-    hash_flipped[`${code.slice().reverse().toString()}`] = i; // add flipped code
+    hash[`${code.join('_')}`] = i;
+    hash_flipped[`${code.slice().reverse().join('_')}`] = i; // add flipped code
   }
   document.querySelector('#codes').innerHTML = html;
   console.log("CSV:"); console.log(csv);
   console.log("CSV (REVERSE):"); console.log(csv_rev);
   
   // Upload to firebase (max 500 per call)
-  // uploadCodes(hash);
-  // uploadCodes(hash_flipped);
+  uploadCodes(hash);
+  uploadCodes(hash_flipped);
 })();
