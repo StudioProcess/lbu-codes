@@ -389,6 +389,7 @@ function uploadCodes(data) {
   let csv = '"Number","Code","Icons"\n', csv_rev = '"Code","Number","Icons"\n';
   let hash = {};
   let hash_flipped = {};
+  let array = ['0_0_0_0_0_0'];
   for (let i=1; i<=n; i++) {
     let code = codes.encode(i);
     let icons = codeToHTMLCopyPaste(code);
@@ -401,12 +402,15 @@ function uploadCodes(data) {
     
     hash[`${code.join('_')}`] = i;
     hash_flipped[`${code.slice().reverse().join('_')}`] = i; // add flipped code
+    
+    array[i] = code.join('_');
   }
   document.querySelector('#codes').innerHTML = html;
   console.log("CSV:"); console.log(csv);
   console.log("CSV (REVERSE):"); console.log(csv_rev);
+  console.log("JSON (REVERSE):"); console.log( JSON.stringify(array) );
   
-  // Upload to firebase (max 500 per call)
-  uploadCodes(hash);
-  uploadCodes(hash_flipped);
+  // // Upload to firebase (max 500 per call)
+  // uploadCodes(hash);
+  // uploadCodes(hash_flipped);
 })();
