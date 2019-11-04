@@ -347,7 +347,18 @@ function uploadCodes(data) {
 }
 
 
-(function main() {
+(async function main() {
+  
+  const salt = await fetch('./_salt.txt').then(async res => {
+    console.log(res);
+    if (res.status != 200) {
+      console.log('Note: No _salt.txt file. Using default salt.')
+      return 'mysalt';
+    }
+    let text = await res.text();
+    return text.trim();
+  });
+  
   // Skip main() function when in Node
   if (typeof process !== 'undefined' && process.title === 'node') { return; } 
   // let p = permutations(9, 7);
@@ -360,12 +371,12 @@ function uploadCodes(data) {
   // console.log( codeLength(321, 10, 1/10000, numCombinations) ); // 18
   // console.log( codeLength(321, 9, 1/10000, numPermutations) ); // 7
   
-  // let codes = new Codes(9, 7, 'salt');
+  // let codes = new Codes(9, 7, salt);
   // console.log(codes);
   // window.codes = codes;
   
-  // let codes = new Codes(9, 6, 'salt', generatePermutationsNoReverse);
-  let codes = new Codes(10, 6, 'salt', generatePermutationsNoReverseMaxRepetition(3));
+  // let codes = new Codes(9, 6, salt, generatePermutationsNoReverse);
+  let codes = new Codes(10, 6, salt, generatePermutationsNoReverseMaxRepetition(3));
   
   // Code Info
   let info = codes.info(321);
@@ -386,19 +397,19 @@ function uploadCodes(data) {
   // Code list
   const n = 321;
   let html = '<thead><tr><td>No.</td><td>Code</td><td>Icons</td></tr></thead>';
-  let csv = '"Number","Code","Icons"\n', csv_rev = '"Code","Number","Icons"\n';
+  let csv = '"Number","Code","Icons"\n', csv_rev = '"Number","Code","Icons"\n';
   let hash = {};
   let hash_flipped = {};
   let array = ['0_0_0_0_0_0'];
   for (let i=1; i<=n; i++) {
     let code = codes.encode(i);
+    let code_rev = [...code];
+    code_rev.reverse();
     let icons = codeToHTMLCopyPaste(code);
     let iconsText = codeToText(code);
     html += `<tr><td>${i}</td><td>${code}</td><td class="icons">${icons}</td></tr>\n`;
     csv += `"${i}","${code.toString()}","${iconsText}"\n`;
-    csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
-    code.reverse();
-    csv_rev += `"${code.toString()}","${i}","${iconsText}"\n`;
+    csv_rev += `"${i}","${code_rev.toString()}","${iconsText}"\n`;
     
     hash[`${code.join('_')}`] = i;
     hash_flipped[`${code.slice().reverse().join('_')}`] = i; // add flipped code
@@ -407,8 +418,8 @@ function uploadCodes(data) {
   }
   document.querySelector('#codes').innerHTML = html;
   console.log("CSV:"); console.log(csv);
-  console.log("CSV (REVERSE):"); console.log(csv_rev);
-  console.log("JSON (REVERSE):"); console.log( JSON.stringify(array) );
+  // console.log("CSV (REVERSE):"); console.log(csv_rev);
+  console.log("JSON:"); console.log( JSON.stringify(array) );
   
   // // Upload to firebase (max 500 per call)
   // uploadCodes(hash);
